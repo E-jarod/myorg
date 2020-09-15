@@ -148,6 +148,127 @@
           "style": "scss"
         }
       }
+    },
+    "fronted": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/fronted",
+      "sourceRoot": "apps/fronted/src",
+      "prefix": "myorg",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/fronted",
+            "index": "apps/fronted/src/index.html",
+            "main": "apps/fronted/src/main.ts",
+            "polyfills": "apps/fronted/src/polyfills.ts",
+            "tsConfig": "apps/fronted/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/fronted/src/favicon.ico",
+              "apps/fronted/src/assets"
+            ],
+            "styles": ["apps/fronted/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/fronted/src/environments/environment.ts",
+                  "with": "apps/fronted/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "fronted:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "fronted:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "fronted:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/fronted/tsconfig.app.json",
+              "apps/fronted/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/fronted/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/fronted/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "fronted-e2e": {
+      "root": "apps/fronted-e2e",
+      "sourceRoot": "apps/fronted-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/fronted-e2e/cypress.json",
+            "tsConfig": "apps/fronted-e2e/tsconfig.e2e.json",
+            "devServerTarget": "fronted:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "fronted:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/fronted-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/fronted-e2e/**/*"]
+          }
+        }
+      }
     }
   },
   "cli": {
